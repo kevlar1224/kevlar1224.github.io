@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Visualization: Latitude Vs. Temperature</title>
+        
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js" integrity="sha384-7aThvCh9TypR7fIc2HV4O/nFMVCBwyIUKL8XCtKE+8xgCgl/PQGuFsvShjr74PBp" crossorigin="anonymous"></script>
+ 
+        <style>
+            html, body {
+                width:100%;
+                height:500px;
+            }
+        </style>
+    </head>
+
+
+    <body>
+        <nav class="navbar top_of_page">
+            <button class="btn home_button"><a class="nav_link home_link" href="index.html">Home</a></button>
+            <div class="big_menu"><button class="btn  comp_button nav_buttons">
+                    <a class="nav_link" href="comparison.html">Comparison</a>
+                </button>
+                <button class="btn  data_button nav_buttons">
+                    <a class= "nav_link" href="data.html">Data</a>
+                </button>
+                <div class="dropdown plots_menu">
+                    <button class="btn btn-secondary dropdown-toggle nav_buttons nav_link" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Plots
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                        <li><a class='dropdown-item' href="cloudiness.html">
+                            Latitude Vs. Cloudiness</a></li>
+                        <li><a class='dropdown-item' href="humidity.html">
+                            Latitude Vs. Humidity</a></li>
+                        <li><a class='dropdown-item' href="temp.html">
+                            Latitude Vs. Temperature</a></li>
+                        <li><a class='dropdown-item' href="wind.html">
+                            Latitude Vs. Wind Speed</a></li>
+    
+                    </ul>
+                </div>
+            </div>
+            <div class="mini_menu dropdown">
+                <button class="btn btn-secondary dropdown-toggle nav_buttons nav_link glypchicon-triangle-bottom" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="glyph_button glyphicon glyphicon-menu-hamburger"></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li><p  class="inner_drop">Plots</p>
+                        <ul>
+                            <li><a class='nav_link' href="cloudiness.html">
+                                Latitude Vs. Cloudiness</a></li>
+                            <li><a class='nav_link' href="humidity.html">
+                                Latitude Vs. Humidity</a></li>
+                            <li><a class='nav_link' href="temp.html">
+                                Latitude Vs. Temperature</a></li>
+                            <li><a class='nav_link' href="wind.html">
+                                Latitude Vs. Wind Speed</a></li>
+                        </ul>
+                    </li>
+                    <li><a class= "nav_link" href="data.html">Data</a></li>
+                    <li><a class="nav_link" href="comparison.html">Comparison</a></li>
+                </ul>
+            </div>
+       </nav>
+        <div class="vis_box">
+            <h1 class="vis_title">Latitude Vs. Temperature</h1>
+            <img class="visualization" src="Images/temp_data_plot.png"/>
+            <p class="exp_paragraph">This plot shows the correlation between 
+                latitude and temperature. As expected, there is a strong correlation, as
+                latitude determines the angle at which sunlight hits a particular
+                area, which in turn determines the amount of absorption. 
+                The graph shows an arc that peaks around the equator, as that is where 
+                energy from the sun is most directly absorbed. </p>
+        </div>
+        <div class="vis_box_side">
+            <h2 class="side_title">Visualizations</h2>
+            <a href="cloudiness.html"><img class="vis_side1" src="Images/cloud_data_plot.png"/></a>
+            <a href="humidity.html"><img class="vis_side2" src="Images/humidity_data_plot.png"/></a>
+            <a href="temp.html"><img class="vis_side3 selected" src="Images/temp_data_plot.png"/></a>
+            <a href="wind.html"><img class="vis_side4" src="Images/wind_data_plot.png"/></a>
+            
+        </div>
+        
+    </body>
+
+
+</html>

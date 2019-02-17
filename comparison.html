@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Comparison of Visualizations</title>
+        
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js" integrity="sha384-7aThvCh9TypR7fIc2HV4O/nFMVCBwyIUKL8XCtKE+8xgCgl/PQGuFsvShjr74PBp" crossorigin="anonymous"></script>
+
+        <style>
+            html, body {
+                width:100%;
+                height:500px;
+            }
+        </style>
+    </head>
+
+
+    <body>
+        <nav class="navbar top_of_page">
+            <button class="btn home_button"><a class="nav_link home_link" href="index.html">Home</a></button>
+            <div class="big_menu"><button class="btn  comp_button nav_buttons">
+                    <a class="nav_link" href="comparison.html">Comparison</a>
+                </button>
+                <button class="btn  data_button nav_buttons">
+                    <a class= "nav_link" href="data.html">Data</a>
+                </button>
+                <div class="dropdown plots_menu">
+                    <button class="btn btn-secondary dropdown-toggle nav_buttons nav_link" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Plots
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                        <li><a class='dropdown-item' href="cloudiness.html">
+                            Latitude Vs. Cloudiness</a></li>
+                        <li><a class='dropdown-item' href="humidity.html">
+                            Latitude Vs. Humidity</a></li>
+                        <li><a class='dropdown-item' href="temp.html">
+                            Latitude Vs. Temperature</a></li>
+                        <li><a class='dropdown-item' href="wind.html">
+                            Latitude Vs. Wind Speed</a></li>
+    
+                    </ul>
+                </div>
+            </div>
+            <div class="mini_menu dropdown">
+                <button class="btn btn-secondary dropdown-toggle nav_buttons nav_link glypchicon-triangle-bottom" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="glyph_button glyphicon glyphicon-menu-hamburger"></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li><p  class="inner_drop">Plots</p>
+                        <ul>
+                            <li><a class='nav_link' href="cloudiness.html">
+                                Latitude Vs. Cloudiness</a></li>
+                            <li><a class='nav_link' href="humidity.html">
+                                Latitude Vs. Humidity</a></li>
+                            <li><a class='nav_link' href="temp.html">
+                                Latitude Vs. Temperature</a></li>
+                            <li><a class='nav_link' href="wind.html">
+                                Latitude Vs. Wind Speed</a></li>
+                        </ul>
+                    </li>
+                    <li><a class= "nav_link" href="data.html">Data</a></li>
+                    <li><a class="nav_link" href="comparison.html">Comparison</a></li>
+                </ul>
+            </div>
+       </nav>
+
+     <div class="container comp_box">
+        <h1 class="vis_title">Comparisons</h1>
+        <div class="comp_grid">
+            <div class="row">
+                <div class="col-md-6 col-sm-12 col-xs-12">
+                    <h3 class="">Latitude Vs. Cloudiness</h3>
+                    <a href="cloudiness.html"><img src="Images/cloud_data_plot.png"/></a>
+                </div>
+                <div class="col-md-6 col-sm-12 col-xs-12">
+                    <h3 class="">Latitude Vs. Humidity</h3>
+                    <a href="humidity.html"><img src="Images/humidity_data_plot.png"/></a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-sm-12 col-xs-12">
+                    <h3 class="">Latitude Vs. Temperature</h3>
+                    <a href="temp.html"><img src="Images/temp_data_plot.png"/></a>
+                </div>
+                <div class="col-md-6 col-sm-12 col-xs-12">
+                    <h3 class="">Latitude Vs. Wind Speed</h3>
+                    <a href="wind.html"><img src="Images/wind_data_plot.png"/></a>
+                </div>
+            </div>
+        </div>
+     </div>
+
+    </body>
+
+
+</html>

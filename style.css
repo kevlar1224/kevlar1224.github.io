@@ -1,0 +1,380 @@
+.big_menu {
+    visibility:visible;
+    position:relative;
+    top:-34px;
+}
+
+.mini_menu {
+    visibility:hidden;
+}
+
+.top_of_page {
+    position:static;
+    background:lightblue;
+    height:40px;
+
+}
+
+.home_button {
+    position:relative;
+    top:7px;
+    left:10px;
+    background:white;
+}
+
+.comp_button {
+    position:relative;
+    float:right;
+    top:10px;
+    right:10px;
+}
+
+.data_button {
+    position:relative;
+    right:20px;
+    top:10px;
+    float:right;
+}
+
+.plots_menu {
+    position:relative;
+    top:10px;
+    right:30px;
+    float:right;
+}
+
+
+.nav_buttons {
+    background:lightblue;
+    color:black;
+    text-decoration:none;
+}
+
+
+.nav_link {
+    color:black;
+    text-decoration:none;
+}
+
+.nav_link:link {
+    color:black;
+    text-decoration:none;
+}
+
+.nav_link:visited {
+    color:black;
+    text-decoration:none;
+}
+
+.nav_link:hover {
+    color:black;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.nav_link:active {
+    color:black;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.vis_title {
+    position:relative;
+    left:30px;
+    top:30px;
+}
+
+.visualization {
+    position:relative;
+    left:25%;
+    top:35px;
+    height:50%;
+    width:50%;
+}
+
+.exp_paragraph {
+    position:relative;
+    top:55px;
+    left:7.5%;
+    text-align: justify;
+    width:85%;
+}
+
+.vis_box {
+    position:relative;
+    left:60px;
+    top:10px;
+    background:lightcyan;
+    height:95%;
+    width:50%;
+}
+
+.vis_box_side {
+    position:relative;
+    float:right;
+    right:60px;
+    top:-93%;
+    background:lightcyan;
+    height:80%;
+    width:35%;
+}
+
+.side_title {
+    position:relative;
+    left:30px;
+    top:20px;
+}
+
+.vis_side1 {
+    position:relative;
+    height:30%;
+    width:37%;
+    left:10%;
+    top:30px;
+}
+
+.vis_side2 {
+    position:relative;
+    height:30%;
+    width:37%;
+    left:15%;
+    top:30px;
+}
+
+.vis_side3 {
+    position:relative;
+    height:30%;
+    width:37%;
+    left:10%;
+    top:50px;
+}
+
+.vis_side4 {
+    position:relative;
+    height:30%;
+    width:37%;
+    left:15%;
+    top:50px;
+}
+
+.selected {
+    border-width:3px;
+    border-style:solid;
+    border-color:lightseagreen;
+}
+
+.data_page {
+    position: relative;
+    top: 20px;
+    left:5%;
+    width:90%;
+    height:100%;
+    bottom:-40px;
+    background-color: lightcyan;
+}
+
+
+.data_buffer {
+    height:60px;
+}
+
+.table_container {
+    position:relative;
+    width:80%;
+    top:60px;
+    left:10%;
+}
+
+.vis_intro {
+    position:relative;
+    float:left;
+    height:50%;
+    width:50%;
+    top:10%;
+    left:5%;
+    padding:10px;
+    margin-right:3%;
+}
+
+.intro_p {
+    position:relative;
+    float:none;
+    left:5%;
+    top:10%;
+    text-align: justify;
+    margin-right:15%;
+}
+
+.comp_box {
+    position:relative;
+    float:left;
+    left:5%;
+    top:20px;
+    background:lightcyan;
+    width:80%;
+}
+
+.comp_grid {
+    position:relative;
+    float:center;
+    top:30px;
+}
+
+
+@media (max-width:1100px) {
+    .big_menu {
+        visibility:hidden;
+    }
+
+    .mini_menu {
+        visibility:visible;
+        position:relative;
+        float:right;
+        top:-45px;
+        right:-200px;
+    }
+    
+    .top_of_page {
+        position:static;
+        background:lightblue;
+        height:80px;
+    }
+    
+    
+    .home_button {
+        position:relative;
+        top:10px;
+        left:10px;
+        background:lightblue;
+        height: 60px;
+    }
+    
+    .home_link {
+        position:relative;
+        bottom:5px;
+        font-size:50px;
+        color:white;
+    }
+
+
+    .comp_button {
+        position:relative;
+        float:right;
+        top:10px;
+        right:10px;
+    }
+    
+    .data_button {
+        position:relative;
+        right:20px;
+        top:10px;
+        float:right;
+    }
+    
+    .plots_menu {
+        position:relative;
+        top:10px;
+        right:30px;
+        float:right;
+    }
+
+    .vis_title {
+        position:relative;
+        left:30px;
+        top:50px;
+    }
+    
+    .visualization {
+        position:relative;
+        left:22%;
+        top:70px;
+        height:49%;
+        width:56%;
+    }
+    
+    .exp_paragraph {
+        position:relative;
+        top:100px;
+        left:30px;
+        text-align: justify;
+        width:85%;
+    }
+
+    .vis_box {
+        position:relative;
+        left:10%;
+        top:20px;
+        background:lightcyan;
+        height:500px;
+        width:80%;
+    }
+    
+    .vis_box_side {
+        position:relative;
+        left:-10%;
+        top:40px;
+        background:lightcyan;
+        height:580px;
+        width:80%;
+    }
+    
+    .vis_side1 {
+        position:relative;
+        height:40%;
+        width:40%;
+        left:5%;
+        top:30px;
+    }
+
+    .vis_side2 {
+        position:relative;
+        height:40%;
+        width:40%;
+        left:10%;
+        top:30px;
+    }
+
+    .vis_side3 {
+        position:relative;
+        height:40%;
+        width:40%;
+        left:5%;
+        top:50px;
+    }
+
+    .vis_side4 {
+        position:relative;
+        height:40%;
+        width:40%;
+        left:10%;
+        top:50px;
+    }
+
+    .data_page {
+        position: relative;
+        top: 20px;
+        left:5%;
+        width:90%;
+        height:100%;
+        bottom:-40px;
+        background-color: lightcyan;
+    }
+
+    .inner_drop {
+        position:relative;
+        top:-5px;
+        width:100%;
+        float:left;
+        left:0px;
+    }
+
+    .glyph_button {
+        font-size:3em
+    }
+
+    .inner_drop {
+        position:relative;
+        left:20px;
+        top:8px;
+    }
+}
