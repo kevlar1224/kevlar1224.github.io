@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>HIV/AIDS Rates</title>
+    <link rel="stylesheet" href="css/style.css">
+    
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.13.0/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.7.1/d3-tip.min.js"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+
+</head>
+
+<body>
+    <nav>
+        <ul class="nav nav-tabs">
+            <li role="presentation"><a href="index.html">Home</a></li>
+            <li role="presentation"><a href="poverty.html">Poverty</a></li>
+            <li role="presentation" class="active"><a href="hiv.html">HIV/AIDs</a></li>
+            <li role="presentation"><a href="infant.html">Infant Mortality</a></li>
+            <li role="presentation"><a href="insurance.html">Insurance</a></li>
+            <li role="presentation"><a href="newborn.html">Newborn Diseases</a></li>
+            <!-- <li role="presentation"><a href="analysis.html">Analysis</a></li> -->
+        </ul>
+    </nav>
+
+    <div class='col-md-1'></div>
+    <div class='col-md-8'>
+        <h1 class='title'>HIV/AIDS Rates</h1>
+
+        <div class='main-content'>
+
+            <h3>HIV/AIDS Rates by Race</h3>
+            <div id='rate-chart'></div>
+            <p>This is a bar chart of the HIV/AIDS rates by race</p>
+            
+            <h3>HIV/AIDS Population by Race</h3>
+            <div id='pop-chart'></div>
+            <p>This is a pie chart of the impoverished populations by race</p>
+
+            <h3>HIV and AIDS Rates by Race</h3>
+            <div id='type-chart'></div>
+            <p>This is a bar chart of the HIV/AIDS rates by race</p>
+
+            <h3>HIV/AIDS Rates by age</h3>
+            <div id='age-chart'></div>
+            <p>This is a bar chart of the populations by type of poverty</p>
+
+            <h3>HIV/AIDS Rates by gender</h3>
+            <div id='gender-chart'></div>
+            <p>This is a bar chart of the populations by type of poverty</p>
+            
+        </div>
+    </div>
+
+</body>
+
+<script type='text/javascript' src="js/hiv.js"></script>
+</html>
