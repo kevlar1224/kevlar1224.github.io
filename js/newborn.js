@@ -137,30 +137,37 @@ d3.csv('../data/newborn/groupedRace.csv').then(function(csv) {
         .data(ordered)
         .enter()
         .append('text')
-        .attr('x', d => xScale(d['Race']) + 15)
-        .attr('y', d => yScale(d['Rate per 100,000']) - 6)
+        .attr('x', d => xScale(d['Race']) + (chartWidth - 16)/16)
+        .attr('y', d => yScale(d['Rate per 100,000']))
+        .attr('text-anchor', 'middle')
+        .attr('alignment-baseline', 'ideographic')
         .attr('font-size', 12)
         .text(d => d['Rate per 100,000'])
         .attr('visibility', 'hidden');
 
-    var povTotal = 0;
+    var popTotal = 0;
     ordered.forEach(function(entry) {
-        povTotal += entry['Case Count'];
+        popTotal += entry['Case Count'];
     });
 
     var otherTotal = 0;
-    ordered.forEach(function(entry) {
-        if (entry['Case Count']/povTotal < .01) {
+    var newOrdered = [];
+    var newColors = [];
+    var newLabels = [];
+    ordered.slice(0,7).forEach(function(entry) {
+        if (entry['Case Count']/popTotal < .01) {
             otherTotal += entry['Case Count'];
-            ordered.splice(ordered.indexOf(entry), 1);
-            colors.splice(ordered.indexOf(entry), 1);
-            labelsLineBreak.splice(ordered.indexOf(entry), 1);
+        }
+        else {
+            newOrdered.push(entry)
+            newColors.push(colors[ordered.indexOf(entry)])
+            newLabels.push(labelsLineBreak[ordered.indexOf(entry)])
         };
     });
     
     colors.push('grey');
-    ordered.push({'Race Label': 'Less Than 1%', 'Case Count': otherTotal, 'Color':'grey'})
-
+    newOrdered.push({'Race Label': 'Less Than 1%', 'Case Count': otherTotal, 'Color':'grey'})
+    
     var radius = chartHeight/2;
 
     var arc = d3.arc()
@@ -175,14 +182,14 @@ d3.csv('../data/newborn/groupedRace.csv').then(function(csv) {
 
     var popSvg = d3.select("#pop-chart")
         .append("svg")
-        .attr("height", svgHeight - 40)
+        .attr("height", svgHeight - 60)
         .attr("width", svgWidth);
 
     var popChart = popSvg.append("g")
         .attr("transform", `translate(${leftMargin + radius}, ${topMargin + radius})`);
 
     var arcGroup = popChart.selectAll('.arc')
-        .data(pie(ordered))
+        .data(pie(newOrdered))
         .enter()
         .append('g')
         .attr('class', 'arc');
@@ -196,8 +203,8 @@ d3.csv('../data/newborn/groupedRace.csv').then(function(csv) {
     arcGroup.append('path')
         .attr('fill', d => d.data.Color)
         .transition()
-        .delay(400)
-        .duration(d => 2000 + 200*pie(ordered).indexOf(d))
+        .delay(500)
+        .duration(d => 2000 + 200*pie(newOrdered).indexOf(d))
         .attrTween('d', tweenPie)
         .attr('stroke', '#d9d9d9')
 
@@ -205,22 +212,22 @@ d3.csv('../data/newborn/groupedRace.csv').then(function(csv) {
         .attr('transform',`translate(${chartHeight + 75}, 100)`)
 
     legend.selectAll('rect')
-        .data(ordered.sort(function(a, b){return b['Case Count'] - a['Case Count']}))
+        .data(newOrdered.sort(function(a, b){return b['Case Count'] - a['Case Count']}))
         .enter()
         .append('rect')
         .attr('height', 20)
         .attr('width', 20)
         .attr('fill', d => d.Color)
         .attr('x', 20)
-        .attr('y', d => 20 *(1 + ordered.indexOf(d)))
+        .attr('y', d => 20 *(1 + newOrdered.indexOf(d)))
 
     legend.selectAll('text')
-        .data(ordered.sort(function(a, b){return b['Case Count'] - a['Case Count']}))
+        .data(newOrdered.sort(function(a, b){return b['Case Count'] - a['Case Count']}))
         .enter()
         .append('text')
         .attr('x', 45)
-        .attr('y', d => 16+20*(1 + ordered.indexOf(d)))
-        .text(d => `${d['Race Label']} - ${Math.round(d['Case Count']*100/povTotal)}%`);
+        .attr('y', d => 16+20*(1 + newOrdered.indexOf(d)))
+        .text(d => `${d['Race Label']} - ${Math.round(d['Case Count']*100/popTotal)}%`);
 });
 
 d3.csv('../data/newborn/diseasesByRace.csv').then(function(csv) {
@@ -257,7 +264,7 @@ d3.csv('../data/newborn/diseasesByRace.csv').then(function(csv) {
 
     var groupedSvg = d3.select("#grouped-chart")
         .append("svg")
-        .attr("height", svgHeight)
+        .attr("height", svgHeight - 20)
         .attr("width", svgWidth);
 
     var groupedChart = groupedSvg.append("g")
@@ -369,7 +376,7 @@ d3.csv('../data/newborn/disorders.csv').then(function(csv) {
 
     var disorderSvg = d3.select("#disease-chart")
         .append("svg")
-        .attr("height", svgHeight)
+        .attr("height", svgHeight - 40)
         .attr("width", svgWidth);
 
     var disorderChart = disorderSvg.append("g")
@@ -393,7 +400,7 @@ d3.csv('../data/newborn/disorders.csv').then(function(csv) {
         .call(yAxis);
 
     disorderChart.append("text")
-        .attr("transform", `translate(${chartWidth/2}, ${chartHeight + 35})`)
+        .attr("transform", `translate(${chartWidth/2}, ${chartHeight + 40})`)
         .attr('text-anchor', 'middle')
         .attr('alignment-baseline', 'ideographic')
         .text("Disorder");
@@ -439,7 +446,7 @@ d3.csv('../data/newborn/disorders.csv').then(function(csv) {
         .on('mouseover', d => mouseover(d))
         .on('mouseout', d => mouseout(d))
         .transition()
-        .delay(800)
+        .delay(1200)
         .duration(d => 1000 + 200*ordered.indexOf(d))
         .attr('height', d => chartHeight - yScale(d['Case Count']));
 

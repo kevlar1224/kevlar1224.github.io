@@ -144,179 +144,6 @@ d3.csv('../data/hiv/race.csv').then(function(csv) {
         .attr('alignment-baseline', 'ideographic')
         .attr('visibility', 'hidden');
 
-    console.log(rateChart.attr('width'))
-
-    var typeOrdered = ordered.map(entry => entry);
-
-    var typeSvg = d3.select("#type-chart")
-        .append("svg")
-        .attr("height", svgHeight)
-        .attr("width", svgWidth);
-
-    var typeChart = typeSvg.append("g")
-        .attr("transform", `translate(${leftMargin}, ${topMargin})`);
-
-    var xScale = d3.scaleBand()
-        .domain(order)
-        .range([8, chartWidth - 8]);
-    var yScale = d3.scaleLinear()
-        .domain([0, d3.max(typeOrdered, item => item['AIDS Rate'])*1.1])
-        .range([chartHeight, 0]);
-
-    var xAxis = d3.axisBottom(xScale);
-    var yAxis = d3.axisLeft(yScale);
-
-    typeChart.append("g")
-        .attr("transform", `translate(0, ${chartHeight})`)
-        .call(xAxis);
-    typeChart.append("g")
-        .call(yAxis);
-
-    typeChart.append("text")
-        .attr("transform", `translate(${chartWidth/2}, ${chartHeight + 60})`)
-        .attr('text-anchor', 'middle')
-        .attr('alignment-baseline', 'ideographic')
-        .text("Race/Ethnicity");
-
-    typeChart.select('g')
-        .selectAll('.tick')
-        .select('text')
-        .data(labelsLineBreak)
-        .text(d => d[0]);
-
-    for (i=1; i<5; i++) {
-        typeChart.select('g')
-            .selectAll('.tick')
-            .select('text')
-            .data(labelsLineBreak)
-            .append('tspan')
-            .attr('y', 15 + 10*i)
-            .attr('x', -1)
-            .text(d => d[i])
-    };
-
-    typeChart.append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("x", -chartHeight/2)
-        .attr("y", -45)
-        .attr('text-anchor', 'middle')
-        .attr('alignment-baseline', 'ideographic')
-        .text("HIV/AIDS Rate (Per 100,000)");
-
-    function typeMouseover(d) {
-        var selectedIndex = typeOrdered.indexOf(d)
-        hivLabels
-            .filter(d => typeOrdered.indexOf(d) === selectedIndex)
-            .attr('visibility', 'visible');
-        aidsLabels
-            .filter(d => typeOrdered.indexOf(d) === selectedIndex)
-            .attr('visibility', 'visible');
-        typeChart.selectAll('rect')
-            .filter(d => typeOrdered.indexOf(d) === selectedIndex)
-            .style('opacity', 1);
-    };
-
-    function typeMouseout(d) {
-        var selectedIndex = typeOrdered.indexOf(d)
-        hivLabels
-            .filter(d => typeOrdered.indexOf(d) === selectedIndex)
-            .attr('visibility', 'hidden');
-        aidsLabels
-            .filter(d => typeOrdered.indexOf(d) === selectedIndex)
-            .attr('visibility', 'hidden');
-        typeChart.selectAll('rect')
-            .filter(d => typeOrdered.indexOf(d) === selectedIndex)
-            .style('opacity', .7);
-    };
-
-    typeChart.selectAll('rect')
-        .data(typeOrdered)
-        .enter()
-        .append('rect')
-        .attr('x', d => xScale(d['Race']))
-        .attr('y', d => yScale(d['HIV (non-AIDS) Rate']))
-        .attr('width', (chartWidth - 16)/14)
-        .style('opacity', .7)
-        .on('mouseover', d => typeMouseover(d))
-        .on('mouseout', d => typeMouseout(d))
-        .transition()
-        .delay(800)
-        .duration(d => 1000 + 200*typeOrdered.indexOf(d))
-        .attr('height', d => chartHeight - yScale(d['HIV (non-AIDS) Rate']))
-        .attr('fill', '#009999')
-        .attr("stroke", "grey");
-
-    typeChart.append('g')
-        .selectAll('rect')
-        .data(typeOrdered)
-        .enter()
-        .append('rect')
-        .attr('x', d => xScale(d['Race']) + (chartWidth - 16)/14)
-        .attr('y', d => yScale(d['AIDS Rate']))
-        .attr('width', (chartWidth - 16)/14)
-        .style('opacity', .7)
-        .on('mouseover', d => typeMouseover(d))
-        .on('mouseout', d => typeMouseout(d))
-        .transition()
-        .delay(800)
-        .duration(d => 1000 + 200*typeOrdered.indexOf(d))
-        .attr('height', d => chartHeight - yScale(d['AIDS Rate']))
-        .attr('fill', 'lightblue')
-        .attr("stroke", "grey");
-
-    var hivLabels = typeChart.append('g')
-        .selectAll('text')
-        .data(typeOrdered)
-        .enter()
-        .append('text')
-        .attr('x', d => xScale(d['Race']) + (chartWidth - 16)/28)
-        .attr('y', d => yScale(d['HIV (non-AIDS) Rate']))
-        .attr('font-size', 12)
-        .text(d => d['HIV (non-AIDS) Rate'])
-        .attr('text-anchor', 'middle')
-        .attr('alignment-baseline', 'ideographic')
-        .attr('visibility', 'hidden');
-
-    var aidsLabels = typeChart.append('g')
-        .selectAll('text')
-        .data(typeOrdered)
-        .enter()
-        .append('text')
-        .attr('x', d => xScale(d['Race']) + (chartWidth - 16)/28 + (chartWidth - 16)/14)
-        .attr('y', d => yScale(d['AIDS Rate']))
-        .attr('font-size', 12)
-        .text(d => d['AIDS Rate'])
-        .attr('text-anchor', 'middle')
-        .attr('alignment-baseline', 'ideographic')
-        .attr('visibility', 'hidden');
-
-    var legend = typeSvg.append('g')
-        .attr('transform',`translate(${chartHeight + 75}, 100)`)
-
-    legend.append('rect')
-        .attr('height', 20)
-        .attr('width', 20)
-        .attr('fill', '#009999')
-        .attr('x', 20)
-        .attr('y', 20)
-
-    legend.append('text')
-        .attr('x', 45)
-        .attr('y', 36)
-        .text('HIV (non-AIDS) Rate')
-
-    legend.append('rect')
-        .attr('height', 20)
-        .attr('width', 20)
-        .attr('fill', 'lightblue')
-        .attr('x', 20)
-        .attr('y', 40)
-
-    legend.append('text')
-        .attr('x', 45)
-        .attr('y', 56)
-        .text('AIDS Rate')
-    
     var povTotal = 0;
     ordered.forEach(function(entry) {
         povTotal += entry['HIV/AIDS Count'];
@@ -354,7 +181,7 @@ d3.csv('../data/hiv/race.csv').then(function(csv) {
 
     var popSvg = d3.select("#pop-chart")
         .append("svg")
-        .attr("height", svgHeight - 40)
+        .attr("height", svgHeight - 60)
         .attr("width", svgWidth);
 
     var popChart = popSvg.append("g")
@@ -411,7 +238,7 @@ d3.csv('data/hiv/age.csv').then(function(csv) {
 
     var ageSvg = d3.select("#age-chart")
     .append("svg")
-    .attr("height", svgHeight)
+    .attr("height", svgHeight - 20)
     .attr("width", svgWidth);
 
     var ageChart = ageSvg.append("g")
@@ -478,7 +305,7 @@ d3.csv('data/hiv/age.csv').then(function(csv) {
         .on('mouseover', d => mouseover(d))
         .on('mouseout', d => mouseout(d))
         .transition()
-        .delay(1200)
+        .delay(800)
         .duration(d => 1000 + 200*csv.indexOf(d))
         .attr('height', d => chartHeight - yScale(d['HIV/AIDS Population Rate']))
         .attr('fill', '#ffff99')
@@ -505,7 +332,7 @@ d3.csv('data/hiv/gender.csv').then(function(csv) {
 
     var genderSvg = d3.select("#gender-chart")
         .append("svg")
-        .attr("height", svgHeight)
+        .attr("height", svgHeight - 20)
         .attr("width", svgWidth);
 
     var genderChart = genderSvg.append("g")
@@ -531,7 +358,7 @@ d3.csv('data/hiv/gender.csv').then(function(csv) {
         .attr("transform", `translate(${chartWidth/2}, ${chartHeight + 60})`)
         .attr('text-anchor', 'middle')
         .attr('alignment-baseline', 'ideographic')
-        .text("Age");
+        .text("Gender");
 
     genderChart.append("text")
         .attr("transform", "rotate(-90)")

@@ -178,7 +178,7 @@ d3.csv('../data/insurance/race.csv').then(function(csv) {
 
     var popSvg = d3.select("#pop-chart")
         .append("svg")
-        .attr("height", svgHeight - 40)
+        .attr("height", svgHeight - 60)
         .attr("width", svgWidth);
 
     var popChart = popSvg.append("g")
@@ -231,7 +231,7 @@ d3.csv('../data/insurance/age.csv').then(function(csv) {
 
     var ageSvg = d3.select("#age-chart")
     .append("svg")
-    .attr("height", svgHeight)
+    .attr("height", svgHeight - 20)
     .attr("width", svgWidth);
 
     var ageChart = ageSvg.append("g")
@@ -298,6 +298,7 @@ d3.csv('../data/insurance/age.csv').then(function(csv) {
         .on('mouseover', d => mouseover(d))
         .on('mouseout', d => mouseout(d))
         .transition()
+        .delay(800)
         .duration(d => 1000 + 200*csv.indexOf(d))
         .attr('height', d => chartHeight - yScale(d['Percent']))
         .attr('fill', '#ff6699')
