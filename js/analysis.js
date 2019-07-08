@@ -9,74 +9,56 @@ var bottomMargin = 95
 var chartHeight = svgHeight - topMargin - bottomMargin;
 var chartWidth = svgWidth - leftMargin - rightMargin;
 
-d3.csv('../data/poverty/race/total.csv').then(function(data) {
-    console.log(data);
-    var order = ['American Indian and/or Alaska Native', 'Asian', 
-                'Black or African American', 'Hispanic', 'Mixed Race',
-                'Native Hawaiian and Other Pacific Islander', 'White', 'Other'];
+d3.csv('../data/analysis/correlations.csv').then(function(csv) {
+    var labelsLineBreak = [['HIV/AIDS', 'Rate', ''],
+                        ['Infant', 'Mortality', 'Rate'],
+                        ['IAP', 'Application', 'Rate'],
+                        ['Newborn', 'Disease', 'Rate']]
 
-    var labelsLineBreak = [['American', 'Indian', 'and/or','Alaska', 'Native'], 
-                ['Asian', '','','',''],['Black or','African','American', '', ''], 
-                ['Hispanic', '','','',''], ['Mixed Race', '','','',''],
-                ['Native','Hawaiian','and Other','Pacific','Islander'], 
-                ['White', '','','',''], ['Other', '','','','']];
-
-    var colors = ['lightgreen', '#009999', 'lightblue', '#ffff99', '#ff9966',
-                '#ff6699', '#cc66ff', 'grey']
-
-    var ordered = [];
-    
-    order.forEach(function(race) {
-        var current = data.forEach(function(entry) {      
-            if (entry['Race'] === race) {
-                entry['Percent'] = +entry['Percent'];
-                entry['Population'] = +entry['Population'];
-                entry['Poverty'] = +entry['Poverty'];
-                entry['Color'] = colors[order.indexOf(race)];
-                ordered.push(entry);
-            };}
-        );
+    csv.forEach(function(entry) {
+        entry['Correlation with Poverty Rate'] = +entry['Correlation with Poverty Rate'];
+        entry['Correlation'] = Math.round(entry['Correlation with Poverty Rate']*1000)/1000;
     });
 
-    var rateSvg = d3.select("#rate-chart")
+    var corrSvg = d3.select("#corr-chart")
         .append("svg")
         .attr("class", 'svg')
-        .attr("height", svgHeight)
+        .attr("height", svgHeight - 20)
         .attr("width", svgWidth);
 
-    var rateChart = rateSvg.append("g")
+    var corrChart = corrSvg.append("g")
         .attr("transform", `translate(${leftMargin}, ${topMargin})`);
 
     var xScale = d3.scaleBand()
-        .domain(order)
+        .domain(csv.map(d => d['Value']))
         .range([8, chartWidth - 8]);
     var yScale = d3.scaleLinear()
-        .domain([0, d3.max(ordered, item => item.Percent)*1.1])
+        .domain([0, d3.max(csv, d => d['Correlation'])*1.1])
         .range([chartHeight, 0]);
 
     var xAxis = d3.axisBottom(xScale);
     var yAxis = d3.axisLeft(yScale);
 
-    rateChart.append("g")
+    corrChart.append("g")
         .attr("transform", `translate(0, ${chartHeight})`)
         .call(xAxis);
-    rateChart.append("g")
+    corrChart.append("g")
         .call(yAxis);
 
-    rateChart.append("text")
+    corrChart.append("text")
         .attr("transform", `translate(${chartWidth/2}, ${chartHeight + 60})`)
         .attr('text-anchor', 'middle')
         .attr('alignment-baseline', 'ideographic')
-        .text("Race/Ethnicity");
+        .text("Population Statistic");
 
-    rateChart.select('g')
+    corrChart.select('g')
         .selectAll('.tick')
         .select('text')
         .data(labelsLineBreak)
         .text(d => d[0]);
 
-    for (i=1; i<5; i++) {
-        rateChart.select('g')
+    for (i=1; i<3; i++) {
+        corrChart.select('g')
             .selectAll('.tick')
             .select('text')
             .data(labelsLineBreak)
@@ -86,269 +68,354 @@ d3.csv('../data/poverty/race/total.csv').then(function(data) {
             .text(d => d[i])
     };
 
-    rateChart.append("text")
+    corrChart.append("text")
         .attr("transform", "rotate(-90)")
         .attr("x", -chartHeight/2)
-        .attr("y", -35)
+        .attr("y", -40)
         .attr('text-anchor', 'middle')
         .attr('alignment-baseline', 'ideographic')
-        .text("Poverty Rate (%)");
+        .text("Correlation Coefficient");
 
     function mouseover(d) {
-        var selectedIndex = ordered.indexOf(d)
-        rateLabels
-            .filter(d => ordered.indexOf(d) === selectedIndex)
+        var selectedIndex = csv.indexOf(d)
+        corrLabels
+            .filter(d => csv.indexOf(d) === selectedIndex)
             .attr('visibility', 'visible');
-        rateChart.selectAll('rect')
-            .filter(d => ordered.indexOf(d) === selectedIndex)
+        corrChart.selectAll('rect')
+            .filter(d => csv.indexOf(d) === selectedIndex)
             .style('opacity', 1);
     };
 
     function mouseout(d) {
-        var selectedIndex = ordered.indexOf(d)
-        rateLabels
-            .filter(d => ordered.indexOf(d) === selectedIndex)
+        var selectedIndex = csv.indexOf(d)
+        corrLabels
+            .filter(d => csv.indexOf(d) === selectedIndex)
             .attr('visibility', 'hidden');
-        rateChart.selectAll('rect')
-            .filter(d => ordered.indexOf(d) === selectedIndex)
+        corrChart.selectAll('rect')
+            .filter(d => csv.indexOf(d) === selectedIndex)
             .style('opacity', .7);
     };
 
-    rateChart.selectAll('rect')
-        .data(ordered)
+    corrChart.selectAll('rect')
+        .data(csv)
         .enter()
         .append('rect')
-        .attr('x', d => xScale(d['Race']))
-        .attr('y', d => yScale(d['Percent']))
-        .attr('width', (chartWidth - 16)/8)
+        .attr('x', d => xScale(d['Value']))
+        .attr('y', d => yScale(d['Correlation']))
+        .attr('width', (chartWidth - 16)/csv.length)
         .style('opacity', .7)
         .on('mouseover', d => mouseover(d))
         .on('mouseout', d => mouseout(d))
         .transition()
-        .duration(d => 1000 + 200*ordered.indexOf(d))
-        .attr('height', d => chartHeight - yScale(d['Percent']))
-        .attr('fill', d => d['Color'])
+        .duration(d => 1000 + 200*csv.indexOf(d))
+        .attr('height', d => chartHeight - yScale(d['Correlation']))
+        .attr('fill', '#33cccc')
         .attr("stroke", "grey");
 
-    var rateLabels = rateChart.append('g')
+    var corrLabels = corrChart.append('g')
         .selectAll('text')
-        .data(ordered)
+        .data(csv)
         .enter()
         .append('text')
         .style('text-align', 'center')
-        .attr('x', d => xScale(d['Race']) + (chartWidth - 16)/16)
-        .attr('y', d => yScale(d['Percent']))
-        .attr('width', (chartWidth - 16)/7)
+        .attr('x', d => xScale(d['Value']) + (chartWidth - 16)/(2*csv.length))
+        .attr('y', d => yScale(d['Correlation']))
         .attr('font-size', 12)
-        .text(d => d['Percent'])
+        .text(d => d['Correlation'])
         .attr('text-anchor', 'middle')
         .attr('alignment-baseline', 'ideographic')
         .attr('visibility', 'hidden');
-
-    var povTotal = 0;
-    ordered.forEach(function(entry) {
-        povTotal += entry['HIV/AIDS Count'];
-    });
-
-    var otherTotal = 0;
-    var newOrdered = [];
-    var newColors = [];
-    var newLabels = [];
-    ordered.forEach(function(entry) {
-        if (entry['HIV/AIDS Count']/povTotal < .01) {
-            otherTotal += entry['HIV/AIDS Count'];
-        }
-        else {
-            newOrdered.push(entry)
-            newColors.push(colors[ordered.indexOf(entry)])
-            newLabels.push(labelsLineBreak[ordered.indexOf(entry)])
-        };
-    });
-    
-    colors.push('grey');
-    newOrdered.push({'Race': 'Less Than 1%', 'Poverty': otherTotal, 'Color':'grey'})
-
-    var povTotal = 0;
-    ordered.forEach(function(entry) {
-        povTotal += entry['Poverty'];
-    });
-
-    var otherTotal = 0;
-    newOrdered.forEach(function(entry) {
-        if (entry['Poverty']/povTotal < .01) {
-            otherTotal += entry['Poverty'];
-            newOrdered.splice(newOrdered.indexOf(entry), 1);
-            colors.splice(newOrdered.indexOf(entry), 1);
-            labelsLineBreak.splice(newOrdered.indexOf(entry), 1);
-        };
-    });
-
-    var radius = chartHeight/2;
-
-    var arc = d3.arc()
-        .outerRadius(radius)
-        .innerRadius(radius*.1)
-        .padAngle(.02)
-        .padRadius(radius)
-        .cornerRadius(4);
-
-    var pie = d3.pie()
-        // .sort(null)
-        .value(d => d['Poverty']);
-
-    var popSvg = d3.select("#pop-chart")
-        .append("svg")
-        .attr('class','svg')
-        .attr("height", svgHeight - 60)
-        .attr("width", svgWidth);
-
-    var popChart = popSvg.append("g")
-        .attr("transform", `translate(${leftMargin + radius}, ${topMargin + radius})`);
-
-    var arcGroup = popChart.selectAll('.arc')
-        .data(pie(newOrdered))
-        .enter()
-        .append('g')
-        .attr('class', 'arc');
-
-    function tweenPie(b) {
-        b.innerRadius = 0;
-        var i = d3.interpolate({startAngle: 0, endAngle: 0}, b);
-        return function(t) { return arc(i(t)); };
-    }
-
-    arcGroup.append('path')
-        .attr('fill', d => d.data.Color)
-        .transition()
-        .delay(500)
-        .duration(d => 2000 + 200*pie(newOrdered).indexOf(d))
-        .attrTween('d', tweenPie)
-        .attr('stroke', '#d9d9d9')
-
-    var legend = popSvg.append('g')
-        .attr('transform',`translate(${chartHeight + 75}, 100)`)
-
-
-    legend.selectAll('rect')
-        .data(newOrdered.sort(function(a, b){return b['Poverty'] - a['Poverty']}))
-        .enter()
-        .append('rect')
-        .attr('height', 20)
-        .attr('width', 20)
-        .attr('fill', d => d.Color)
-        .attr('x', 20)
-        .attr('y', d => 20 *(1 + newOrdered.indexOf(d)))
-
-    legend.selectAll('text')
-        .data(newOrdered.sort(function(a, b){return b['Poverty'] - a['Poverty']}))
-        .enter()
-        .append('text')
-        .attr('x', 45)
-        .attr('y', d => 16+20*(1 + newOrdered.indexOf(d)))
-        .text(d => `${d['Race']} - ${Math.round(d['Poverty']*100/povTotal)}%`);
 });
 
-d3.csv('data/poverty/type/total.csv').then(function(csv) {
-    var colors = ['lightgreen', '#009999', 'lightblue'];
+d3.csv('../data/analysis/othercoeffs.csv').then(function(csv) {
+    var labelsLineBreak = [['HIV/', 'AIDS', 'Rate'],
+                        ['Infant', 'Mortality', 'Rate'],
+                        ['IAP', 'Application', 'Rate'],
+                        ['Newborn', 'Disease', 'Rate']]
+
+    var usedLabels = [];
+    var organized = [];
+
+    function selectColor(value) {
+        if (value === 1) {
+            return "black"
+        }
+        else if (value > .9) {
+            return "#33cc33"
+        }
+        else if (value > .6) {
+            return "#85e085"
+        }
+        else if (value > .5) {
+            return "#c2f0c2"
+        }
+        else {
+            return "#eafaea"
+        }
+    }
 
     csv.forEach(function(entry) {
-        entry['Percent'] = +entry['Percent'];
-        entry['Population'] = +entry['Population'];
-        entry['Poverty'] = +entry['Poverty'];
+        Object.keys(entry).forEach(function(key) {
+            if (key != 'Factor' && !(usedLabels.includes(key))) {
+                var newEntry = {};
+                newEntry['Factor'] = entry['Factor'];
+                newEntry['Other Factor'] = key;
+                newEntry[key] = +entry[key];
+                newEntry[key] = Math.round(newEntry[key]*1000)/1000;
+                organized.push(newEntry);
+            };
+        });
+        usedLabels.push(entry['Factor']);
     });
 
-    var typeSvg = d3.select("#type-chart")
+    var interSvg = d3.select("#inter-chart")
         .append("svg")
-        .attr('class','svg')
+        .attr("class", 'svg')
         .attr("height", svgHeight - 20)
         .attr("width", svgWidth);
 
-    var typeChart = typeSvg.append("g")
-        .attr("transform", `translate(${leftMargin}, ${topMargin})`);
+    var interChart = interSvg.append("g")
+        .attr("transform", `translate(${leftMargin + 10}, ${topMargin + 40})`);
 
     var xScale = d3.scaleBand()
-        .domain(csv.map(entry => entry['Type']))
-        .range([8, chartWidth - 8]);
+        .domain(csv.map(d => d['Factor']))
+        .range([chartWidth, 0]);
+    var yScale = d3.scaleBand()
+        .domain(csv.map(d => d['Factor']))
+        .range([0, chartHeight]);
+
+    var xAxis = d3.axisTop(xScale);
+    var yAxis = d3.axisLeft(yScale);
+
+    var xLabels = interChart.append("g")
+        .call(xAxis);
+    var yLabels = interChart.append("g")
+        .call(yAxis);
+
+    xLabels.selectAll('.tick')
+        .select('text')
+        .data(labelsLineBreak)
+        .attr('y', -30)
+        .attr('text-anchor', 'middle')
+        .attr('alignment-baseline', 'ideographic')
+        .text(d => d[0]);
+
+    for (i=1; i<3; i++) {
+        xLabels.selectAll('.tick')
+            .select('text')
+            .data(labelsLineBreak)
+            .append('tspan')
+            .attr('y', -30 + 10*i)
+            .attr('x', -1)
+            .attr('text-anchor', 'middle')
+            .attr('alignment-baseline', 'ideographic')
+            .text(d => d[i])
+    };
+
+    yLabels.selectAll('.tick')
+        .select('text')
+        .data(labelsLineBreak)
+        .attr('y', -6)
+        .attr('x', -35)
+        .attr('text-anchor', 'middle')
+        .attr('alignment-baseline', 'ideographic')
+        .text(d => d[0]);
+
+    for (i=1; i<3; i++) {
+        yLabels.selectAll('.tick')
+            .select('text')
+            .data(labelsLineBreak)
+            .append('tspan')
+            .attr('y', -4 + 10*i)
+            .attr('x', -35)
+            .attr('text-anchor', 'middle')
+            .attr('alignment-baseline', 'ideographic')
+            .text(d => d[i])
+    };
+
+    interChart.selectAll('rect')
+        .data(organized)
+        .enter()
+        .append('rect')
+        .attr('x', d => xScale(d['Other Factor']))
+        .attr('y', d => yScale(d['Factor']))
+        .attr('width', chartWidth/4)
+        .style('opacity', .7)
+        .transition()
+        .delay(400)
+        .duration(d => 1000 + 200*csv.indexOf(d))
+        .attr('height', chartHeight/4)
+        .attr('fill', d => selectColor(d[d['Other Factor']]))
+        .attr("stroke", "grey");
+
+    interChart.append('g')
+        .selectAll('text')
+        .data(organized)
+        .enter()
+        .append('text')
+        .style('text-align', 'center')
+        .attr('x', d => xScale(d['Other Factor']) + chartWidth/8)
+        .attr('y', d => yScale(d['Factor']) + chartHeight/8)
+        .attr('font-size', 12)
+        .transition()
+        .delay(400)
+        .duration(d => 1000 + 200*csv.indexOf(d))
+        .text(d => d[d['Other Factor']])
+        .attr('text-anchor', 'middle')
+        .attr('alignment-baseline', 'central');
+});
+
+d3.csv('../data/analysis/combined.csv').then(function(csv) {
+    csv.forEach(function(entry) {
+        entry['HIV/AIDS Rate'] = +entry['HIV/AIDS Rate'];
+        entry['Disease Rate per 100,000'] = +entry['Disease Rate per 100,000'];
+        if (entry['Race'] === 'Native Hawaiian and Other Pacific Islander') {
+            csv.splice(csv.indexOf(entry), 1);
+        }
+    });
+
+    console.log(csv);
+
+    var xScale = d3.scaleLinear()
+        .domain([0, d3.max(csv, d => d['HIV/AIDS Rate'])*1.1])
+        .range([0, chartWidth]);
+
     var yScale = d3.scaleLinear()
-        .domain([0, d3.max(csv, item => item.Percent)*1.1])
+        .domain([0, d3.max(csv, d => d['Disease Rate per 100,000'])*1.1])
         .range([chartHeight, 0]);
+
+    var twoSvg = d3.select('#two-chart')
+        .append('svg')
+        .attr('class', 'svg')
+        .attr('height', svgHeight - 20)
+        .attr('width', svgWidth);
+
+    var twoChart = twoSvg.append('g')
+        .attr("transform", `translate(${leftMargin}, ${topMargin})`);
 
     var xAxis = d3.axisBottom(xScale);
     var yAxis = d3.axisLeft(yScale);
 
-    typeChart.append("g")
-        .attr("transform", `translate(0, ${chartHeight})`)
+    twoChart.append('g')
+        .attr('transform', `translate(0, ${chartHeight})`)
         .call(xAxis);
-    typeChart.append("g")
+
+    twoChart.append('g')
         .call(yAxis);
 
-    typeChart.append("text")
-        .attr("transform", `translate(${chartWidth/2}, ${chartHeight + 60})`)
+    twoChart.append('text')
+        .text('HIV/AIDS Rate (Per 100,000)')
+        .attr('x', chartWidth/2)
+        .attr('y', chartHeight + 50)
         .attr('text-anchor', 'middle')
-        .text("Poverty Type");
 
-    typeChart.select('g')
-        .selectAll('.tick')
-        .select('text')
-        .data(csv)
-        .text(d => d['Type']);
-
-    typeChart.append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("x", -chartHeight/2)
-        .attr("y", -35)
+    twoChart.append('text')
+        .text('Disease Rate (Per 100,000)')
+        .attr('x', -chartHeight/2)
+        .attr('y', -40)
+        .attr('transform', 'rotate(-90)')
         .attr('text-anchor', 'middle')
-        .attr('alignment-baseline', 'ideographic')
-        .text("Poverty Rate (%)");
+
+    var intercept = 35.0420874;
+    var slope = 0.27393774;
+
+    var lineData = [{"x": 0, "y":intercept}, {"x": 1050, "y":intercept+slope*1050}];
+
+    console.log(lineData);
+
+    var drawLine = d3.line()
+        .x(d => xScale(d.x))
+        .y(d => yScale(d.y));
 
     function mouseover(d) {
         var selectedIndex = csv.indexOf(d)
-        typeLabels
+        raceLabels
             .filter(d => csv.indexOf(d) === selectedIndex)
             .attr('visibility', 'visible');
-        typeChart.selectAll('rect')
+        hivLabels
+            .filter(d => csv.indexOf(d) === selectedIndex)
+            .attr('visibility', 'visible');
+        disorderLabels
+            .filter(d => csv.indexOf(d) === selectedIndex)
+            .attr('visibility', 'visible');
+        twoChart.selectAll('circle')
             .filter(d => csv.indexOf(d) === selectedIndex)
             .style('opacity', 1);
     };
 
     function mouseout(d) {
         var selectedIndex = csv.indexOf(d)
-        typeLabels
+        raceLabels
             .filter(d => csv.indexOf(d) === selectedIndex)
             .attr('visibility', 'hidden');
-        typeChart.selectAll('rect')
+        hivLabels
+            .filter(d => csv.indexOf(d) === selectedIndex)
+            .attr('visibility', 'hidden');
+        disorderLabels
+            .filter(d => csv.indexOf(d) === selectedIndex)
+            .attr('visibility', 'hidden');
+        twoChart.selectAll('circle')
             .filter(d => csv.indexOf(d) === selectedIndex)
             .style('opacity', .7);
     };
 
-    typeChart.selectAll('rect')
+    twoChart.append('path')
+        .transition()
+        .delay(800)
+        .duration(2200)
+        .attr("d", drawLine(lineData))
+        .attr('stroke', 'lightgrey')
+        .attr("stroke-width", 2);
+    
+    twoChart.selectAll('circle')
         .data(csv)
         .enter()
-        .append('rect')
-        .attr('x', d => xScale(d['Type']))
-        .attr('y', d => yScale(d['Percent']))
-        .attr('width', (chartWidth - 16)/3)
-        .style('opacity', .7)
+        .append('circle')
+        .attr('cx', d => xScale(d['HIV/AIDS Rate']))
+        .attr('cy', d => yScale(d['Disease Rate per 100,000']))
         .on('mouseover', d => mouseover(d))
         .on('mouseout', d => mouseout(d))
         .transition()
         .delay(800)
         .duration(d => 1000 + 200*csv.indexOf(d))
-        .attr('height', d => chartHeight - yScale(d['Percent']))
-        .attr('fill', d => colors[csv.indexOf(d)])
+        .attr('r', 10)
+        .attr('opacity', .7)
+        .attr('fill', '#dd99ff')
         .attr("stroke", "grey");
 
-    var typeLabels = typeChart.append('g')
+    var raceLabels = twoChart.append('g')
         .selectAll('text')
         .data(csv)
         .enter()
         .append('text')
         .style('text-align', 'center')
-        .attr('x', d => xScale(d['Type']) + (chartWidth-16)/6)
-        .attr('y', d => yScale(d['Percent']))
+        .attr('x', d => xScale(d['HIV/AIDS Rate']) + 11)
+        .attr('y', d => yScale(d['Disease Rate per 100,000']) + 13)
         .attr('font-size', 12)
-        .text(d => d['Percent'])
-        .attr('text-anchor', 'middle')
-        .attr('alignment-baseline', 'ideographic')
+        .text(d => d['Race'])
+        .attr('visibility', 'hidden')
+
+    var hivLabels = twoChart.append('g')
+        .selectAll('text')
+        .data(csv)
+        .enter()
+        .append('text')
+        .style('text-align', 'center')
+        .attr('x', d => xScale(d['HIV/AIDS Rate']) + 11)
+        .attr('y', d => yScale(d['Disease Rate per 100,000']) + 25)
+        .attr('font-size', 12)
+        .text(d => 'HIV/AIDS Rate: ' + d['HIV/AIDS Rate'])
+        .attr('visibility', 'hidden')
+
+    var disorderLabels = twoChart.append('g')
+        .selectAll('text')
+        .data(csv)
+        .enter()
+        .append('text')
+        .style('text-align', 'center')
+        .attr('x', d => xScale(d['HIV/AIDS Rate']) + 11)
+        .attr('y', d => yScale(d['Disease Rate per 100,000']) + 37)
+        .attr('font-size', 12)
+        .text(d => 'Disease Rate: ' + d['Disease Rate per 100,000'])
         .attr('visibility', 'hidden');
 });

@@ -94,7 +94,7 @@ d3.csv('../data/newborn/groupedRace.csv').then(function(csv) {
         .attr("y", -35)
         .attr('text-anchor', 'middle')
         .attr('alignment-baseline', 'ideographic')
-        .text("Rate per 100,000 (Per 100,000)");
+        .text("Disease Rate (Per 100,000)");
 
     function mouseover(d) {
         var selectedIndex = ordered.indexOf(d)
@@ -316,7 +316,7 @@ d3.csv('../data/newborn/diseasesByRace.csv').then(function(csv) {
         .attr("y", -50)
         .attr('text-anchor', 'middle')
         .attr('alignment-baseline', 'ideographic')
-        .text("Rate per 100,000 (Per 100,000)");
+        .text("Disease Rate (Per 100,000)");
 
     function mouseover(d) {
         var selectedIndex = ordered.indexOf(d)

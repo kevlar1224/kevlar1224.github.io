@@ -88,7 +88,7 @@ d3.csv('../data/hiv/race.csv').then(function(csv) {
     rateChart.append("text")
         .attr("transform", "rotate(-90)")
         .attr("x", -chartHeight/2)
-        .attr("y", -45)
+        .attr("y", -35)
         .attr('text-anchor', 'middle')
         .attr('alignment-baseline', 'ideographic')
         .text("HIV/AIDS Rate (Per 100,000)");
